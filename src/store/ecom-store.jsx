@@ -12,8 +12,9 @@ const ecomStore = (set, get) => ({
     categories: [],
     products: [],
     carts: [],
-    logout: () => {
 
+ 
+    logout: () => {
         set({
             user: null,
             token: null,
@@ -21,9 +22,8 @@ const ecomStore = (set, get) => ({
             products: [],
             carts: [],
         })
+        localStorage.removeItem('ecom-store') 
     },
-
-
 
     actionAddtocart: (product) => {
         const carts = get().carts
@@ -53,7 +53,7 @@ const ecomStore = (set, get) => ({
 
     clearCart: () => {
         set({ carts: [] })
-        localStorage.removeItem('ecom-store')
+        localStorage.removeItem('ecom-store') // ลบ localStorage ด้วย
     },
 
     TotalPrice: () => {
@@ -61,8 +61,6 @@ const ecomStore = (set, get) => ({
             return total + item.price * item.count
         }, 0)
     },
-
-
 
     actionLogin: async (form) => {
         const response = await axios.post('https://backendecom-efsw.onrender.com/login', form)
@@ -75,17 +73,6 @@ const ecomStore = (set, get) => ({
         return response
     },
 
-    logout: () => {
-        set({
-            user: null,
-            token: null,
-            carts: []
-        })
-        localStorage.removeItem('ecom-store')
-    },
-
-
-
     getCategory: async () => {
         try {
             const response = await listCategory()
@@ -94,8 +81,6 @@ const ecomStore = (set, get) => ({
             console.log(error)
         }
     },
-
-
 
     getProduct: async (count) => {
         try {
@@ -115,10 +100,7 @@ const ecomStore = (set, get) => ({
         }
     },
 
-    clearCart: () => {
 
-        set({ carts: [] })
-    },
 
 })
 
@@ -126,8 +108,6 @@ const usePersist = {
     name: 'ecom-store',
     storage: createJSONStorage(() => localStorage),
 }
-
-
 
 const useEcomStore = create(persist(ecomStore, usePersist))
 
